@@ -9,6 +9,7 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { goerli } from "wagmi/chains";
+import { Toaster } from "react-hot-toast";
 
 const chains = [goerli];
 const projectId = "63be1ce47f3d32685b686ecb58a7d575";
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <WagmiConfig client={wagmiClient}>
         <NavBar />
         <Component {...pageProps} />
+        <Toaster position="bottom-right" />
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />

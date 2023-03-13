@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import toast from "react-hot-toast";
 
 /*OPENAI CONFIG*/
 const configuration = new Configuration({
@@ -19,10 +20,10 @@ export default function Generate() {
 
   // GENERATE FUNCTION
   const generateImages = async () => {
+    const toastId = toast.loading("generating...");
+    setIsGenerating(true);
+    setData([]);
     try {
-      setIsGenerating(true);
-      setData([]);
-
       const response = await openai.createImage({
         prompt: prompt,
         n: 2,
@@ -34,8 +35,14 @@ export default function Generate() {
         setData((data) => [...data, item.url as string]);
 
         setIsGenerating(false);
+        toast.success("generated", {
+          id: toastId,
+        });
       });
     } catch (err) {
+      toast.error("Error", {
+        id: toastId,
+      });
       setIsGenerating(false);
       console.error(err);
     }
@@ -43,7 +50,7 @@ export default function Generate() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
-      <section className="relative text-lg bg-zinc-800 rounded-lg w-full">
+      <section className="relative text-lg bg-zinc-800 border-2 border-zinc-700/50 rounded-lg w-full">
         <textarea
           className="w-full bg-zinc-800 p-4 rounded-t-lg resize-none outline-none"
           rows={6}
@@ -94,7 +101,13 @@ export default function Generate() {
       {data.length > 0 && (
         <section className="gap-5 lg:mt-0 rounded-lg grid grid-cols-2">
           {data?.map((item, index) => {
-            return <img src={item} key={index} className="rounded-xl" />;
+            return (
+              <img
+                src={item}
+                key={index}
+                className="rounded-xl border-2 border-zinc-700/50"
+              />
+            );
           })}
         </section>
       )}
