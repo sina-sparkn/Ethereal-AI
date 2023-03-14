@@ -2,6 +2,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 /*OPENAI CONFIG*/
 const configuration = new Configuration({
@@ -11,10 +12,10 @@ const openai = new OpenAIApi(configuration);
 
 // MAIN FUNCTION
 export default function Generate() {
-  // USESTATE
   const [prompt, setPrompt] = useState("");
   const [data, setData] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+
   // WAGMI CONFIGS
   const Account = useAccount();
 
@@ -33,11 +34,19 @@ export default function Generate() {
 
       response.data.data.map((item) => {
         setData((data) => [...data, item.url as string]);
+      });
 
-        setIsGenerating(false);
-        toast.success("generated", {
-          id: toastId,
-        });
+      saveImages(
+        [
+          response.data.data[0].url as string,
+          response.data.data[1].url as string,
+        ],
+        prompt
+      );
+
+      setIsGenerating(false);
+      toast.success("generated", {
+        id: toastId,
       });
     } catch (err) {
       toast.error("Error", {
@@ -46,6 +55,22 @@ export default function Generate() {
       setIsGenerating(false);
       console.error(err);
     }
+  };
+
+  /* SAVE IMAGES TO DATABASE FUNCTION */
+  const saveImages = async (urls: string[], thePrompt: string) => {
+    await axios
+      .post("/api/saveimages", {
+        ImageURLs: [urls[0], urls[1]],
+        Description: thePrompt,
+        WalletAddress: Account.address,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -69,9 +94,8 @@ export default function Generate() {
                   <button
                     disabled
                     className="w-full bg-blue-500 p-2.5 rounded-lg disabled:bg-gray-600 disabled:text-gray-400"
-                    onClick={generateImages}
                   >
-                    Generate
+                    Generating...
                   </button>
                 );
               } else {
@@ -89,9 +113,8 @@ export default function Generate() {
                 <button
                   disabled
                   className="w-full bg-blue-500 p-2.5 rounded-lg disabled:bg-gray-600 disabled:text-gray-400"
-                  onClick={generateImages}
                 >
-                  Generate
+                  Connect Your Wallet
                 </button>
               );
             }

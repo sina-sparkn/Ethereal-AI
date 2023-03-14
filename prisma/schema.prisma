@@ -7,19 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CloundinaryIds {
-  walletAddress String @unique
-  id            String
-}
-
 model Images {
   id                   Int       @id @default(autoincrement())
   urls                 String[]
   description          String
   minted               Boolean[] @default([false, false])
   generatedAt          DateTime  @default(now())
+  creator              User      @relation(fields: [creatorWalletAddress], references: [walletAddress])
   creatorWalletAddress String
-  User                 User      @relation(fields: [creatorWalletAddress], references: [walletAddress])
+}
+
+model User {
+  walletAddress String   @unique
+  name          String?
+  images        Images[]
 }
 
 model Metadata {
@@ -29,8 +30,7 @@ model Metadata {
   image       String
 }
 
-model User {
-  walletAddress String   @unique
-  name          String?
-  Images        Images[]
+model CloundinaryIds {
+  walletAddress String @unique
+  id            String @id @default(cuid())
 }
