@@ -29,7 +29,12 @@ export default function NavBar() {
             <Link href="/dashboard">Dashboard</Link>
           )}
 
-          <Web3Button avatar="hide" balance="hide" icon="hide" label="hide" />
+          <Web3Button
+            avatar="hide"
+            balance="hide"
+            icon="hide"
+            label="Connect Wallet"
+          />
         </li>
       </ul>
       <hr className="border-0 h-0.5 bg-white/10" />
