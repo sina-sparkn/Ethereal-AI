@@ -9,9 +9,10 @@ export default function NavBar() {
   setTheme({
     themeMode: "dark",
     themeVariables: {
-      "--w3m-accent-color": "#3B82F6",
-      "--w3m-button-border-radius": "50px",
-      "--w3m-background-color": "#3B82F6",
+      "--w3m-accent-color": "white",
+      "--w3m-accent-fill-color": "black",
+      "--w3m-button-border-radius": "10px",
+      "--w3m-background-color": "white",
       "--w3m-background-border-radius": "18px",
     },
   });
@@ -19,9 +20,21 @@ export default function NavBar() {
   return (
     <nav className="mb-5">
       <ul className="flex mb-5 items-center justify-between">
-        <li className="w-28">
+        <li>
           <Link href="./">
-            <img src="./typeface.svg" alt="logo-type" />
+            {router.asPath === "/dashboard" ? (
+              <img
+                src="./white/iconWhite.svg"
+                alt="RealAI-Logo"
+                className="w-8"
+              />
+            ) : (
+              <img
+                src="./blue/fullBlue.svg"
+                alt="RealAI-FullLogo"
+                className="w-32"
+              />
+            )}
           </Link>
         </li>
         <li className="flex items-center gap-5">

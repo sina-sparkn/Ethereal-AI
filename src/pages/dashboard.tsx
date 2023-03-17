@@ -16,31 +16,34 @@ export default function DashBoard() {
   const Account = useAccount();
   const [allData, setAllData] = useState<props[]>([]);
 
-  const getAllGeneratedImages = async () => {
-    await axios
-      .get(`/api/images/${Account.address}`)
-      .then((res) => {
-        setAllData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
   useEffect(() => {
-    getAllGeneratedImages();
-  }, []);
+    const getAllGeneratedImages = async () => {
+      await axios
+        .get(`/api/images/${Account.address}`)
+        .then((res) => {
+          setAllData(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
 
-  return (
-    <>
-      <Head>
-        <title>Dashboard | EtheReal-AI</title>
-        <meta name="description" content="user dashboard Erhereal. AI" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Link href="/dashboard">
-        <p className="text-3xl font-bold">DashBoard</p>
+    getAllGeneratedImages();
+  }, [Account.status]);
+
+  if (Account.status === "connected") {
+    return (
+      <>
+        <Head>
+          <title>Dashboard | RealAI</title>
+          <meta name="description" content="user dashboard Erhereal. AI" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" type="image/x-icon" href="./favicon.svg"></link>
+        </Head>
+        <Link href="/dashboard">
+          <span className="text-3xl font-bold">DashBoard</span>
+        </Link>
         <div className="flex flex-col">
           {allData.map((item, index) => {
             return (
@@ -57,7 +60,23 @@ export default function DashBoard() {
             );
           })}
         </div>
-      </Link>
-    </>
-  );
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Head>
+          <title>Dashboard | RealAI</title>
+          <meta name="description" content="user dashboard Erhereal. AI" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" type="image/x-icon" href="./favicon.svg"></link>
+        </Head>
+        <div className="w-full h-96 flex items-center justify-center">
+          <span className="text-xl font-semibold">
+            Wallet is Not Connected!
+          </span>
+        </div>
+      </>
+    );
+  }
 }
