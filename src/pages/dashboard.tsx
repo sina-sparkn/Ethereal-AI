@@ -41,21 +41,27 @@ export default function DashBoard() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" type="image/x-icon" href="./favicon.svg"></link>
         </Head>
-        <Link href="/dashboard">
-          <span className="text-3xl font-bold">DashBoard</span>
-        </Link>
-        <div className="flex flex-col">
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard">
+            <span className="text-3xl font-bold">DashBoard</span>
+          </Link>
+        </div>
+        <div className="flex flex-col mt-5 bg-red-500">
           {allData.map((item, index) => {
             return (
-              <div key={index} className="flex flex-col gap-5 p-10">
-                <img src={item.urls[0]} alt="" />
-                <img src={item.urls[1]} alt="" />
-                <p>{item.creatorWalletAddress}</p>
-                <p>{item.description}</p>
-                <p>{item.generatedAt}</p>
-                <p>{Number(item.minted[0])}</p>
-                <p>{Number(item.minted[1])}</p>
-                <p>{item.id}</p>
+              <div key={index} className="relative">
+                <div className="grid grid-cols-2 gap-5">
+                  <img
+                    className="rounded-xl"
+                    src={item.urls[0]}
+                    alt={`image-0-${item.description}`}
+                  />
+                  <img
+                    className="rounded-xl"
+                    src={item.urls[1]}
+                    alt={`image-1-${item.description}`}
+                  />
+                </div>
               </div>
             );
           })}

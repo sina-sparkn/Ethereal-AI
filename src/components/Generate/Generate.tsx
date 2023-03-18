@@ -36,13 +36,13 @@ export default function Generate() {
         setData((data) => [...data, item.url as string]);
       });
 
-      // saveImages(
-      //   [
-      //     response.data.data[0].url as string,
-      //     response.data.data[1].url as string,
-      //   ],
-      //   prompt
-      // );
+      saveImages(
+        [
+          response.data.data[0].url as string,
+          response.data.data[1].url as string,
+        ],
+        prompt
+      );
 
       setIsGenerating(false);
       toast.success("generated", {
