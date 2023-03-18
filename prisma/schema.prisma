@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CloundinaryIds {
+  walletAddress String
+  id            String @id
+}
+
+model Images {
+  id                   Int       @id @default(autoincrement())
+  urls                 String[]
+  description          String
+  minted               Boolean[] @default([false, false])
+  generatedAt          DateTime  @default(now())
+  creatorWalletAddress String
+  User                 User      @relation(fields: [creatorWalletAddress], references: [walletAddress])
+}
+
+model Metadata {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+}
+
+model User {
+  walletAddress String   @id
+  name          String?
+  Images        Images[]
+}
