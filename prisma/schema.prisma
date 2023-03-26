@@ -9,7 +9,7 @@ datasource db {
 
 model CloundinaryIds {
   walletAddress String
-  id            String @id
+  id            String @id @default(cuid())
 }
 
 model Images {
